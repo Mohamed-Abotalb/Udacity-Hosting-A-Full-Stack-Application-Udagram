@@ -30,7 +30,6 @@ jobs:
           name: Build and Archive Server
           command: |-
             npm run build
-            printenv > www/.env
       - aws-cli/install
       - run:
           name: Deploy Server
@@ -38,9 +37,6 @@ jobs:
             aws s3 cp ./www/Archive.zip udagram-app-env
             aws elasticbeanstalk create-application-version --application-name $EB_APP --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="$EB_BUCKET",S3Key="Archive.zip"
             aws elasticbeanstalk update-environment --application-name $EB_APP --environment-name $EB_ENV --version-label <<pipeline.git.revision>>
-      - node/test:
-          version: '16.10'
-          pkg-manager: npm
 workflows:
   build_and_deploy:
     jobs:
