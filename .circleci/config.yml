@@ -2,11 +2,6 @@ version: 2.1
 orbs:
   node: circleci/node@4.7
   aws-cli: circleci/aws-cli@2.0.0
-workflows:
-  build_and_deploy:
-    jobs:
-      - frontend
-      - server
 jobs:
   frontend:
     working_directory: ~/app/udagram-frontend
@@ -46,3 +41,8 @@ jobs:
       - node/test:
           version: '16.10'
           pkg-manager: npm
+workflows:
+  build_and_deploy:
+    jobs:
+      - frontend
+      - server
