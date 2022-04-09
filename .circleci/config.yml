@@ -37,8 +37,8 @@ jobs:
           name: Deploy Server
           command: |-
             aws s3 cp ./www/Archive.zip udagram-app-env
-            aws elasticbeanstalk create-application-version --application-name $EB_APP --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="$EB_BUCKET",S3Key="Archive.zip"
-            aws elasticbeanstalk update-environment --application-name $EB_APP --environment-name $EB_ENV --version-label <<pipeline.git.revision>>
+            aws elasticbeanstalk create-application-version --application-name udagram-app --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="udagram-mohamed",S3Key="Archive.zip"
+            aws elasticbeanstalk update-environment --application-name udagram-app --environment-name udagram-app-env --version-label <<pipeline.git.revision>>
       - node/test:
           version: '16.10'
           pkg-manager: npm
