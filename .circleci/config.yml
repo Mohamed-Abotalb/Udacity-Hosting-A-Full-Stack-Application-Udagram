@@ -1,13 +1,7 @@
-# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
 version: 2.1
 orbs:
-  node: circleci/node@4.7
+  node: circleci/node@4.2.0
   aws-cli: circleci/aws-cli@2.0.0
-workflows:
-  build_and_deploy:
-    jobs:
-      - frontend
-      - server
 jobs:
   frontend:
     working_directory: ~/app/udagram-frontend
@@ -23,7 +17,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Deploy Frontend
-          command: aws s3 cp --recursive --acl public-read ./www s3://udagram-mohamed/
+          command: aws s3 cp --recursive --acl public-read ./www $S3_BUCKET_FRONTEND
   server:
     working_directory: ~/app/udagram-api
     executor: node/default
@@ -37,13 +31,16 @@ jobs:
           command: |-
             npm run build
             printenv > www/.env
+            npm run archive
       - aws-cli/install
       - run:
           name: Deploy Server
           command: |-
-            aws s3 cp ./www/Archive.zip udagram-app-env
+            aws s3 cp ./www/Archive.zip $S3_BUCKET_SERVER
             aws elasticbeanstalk create-application-version --application-name $EB_APP --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="$EB_BUCKET",S3Key="Archive.zip"
             aws elasticbeanstalk update-environment --application-name $EB_APP --environment-name $EB_ENV --version-label <<pipeline.git.revision>>
-      - node/test:
-          version: '16.10'
-          pkg-manager: npm
+workflows:
+  build_and_deploy:
+    jobs:
+      - frontend
+      - server
