@@ -12,7 +12,7 @@ jobs:
       - node/install-packages:
           app-dir: ~/app/udagram-frontend
       - run:
-          name: Build Frontend
+          name: Frontend Build
           command: npm run build
       - aws-cli/install
       - run:
@@ -27,18 +27,18 @@ jobs:
       - node/install-packages:
           app-dir: ~/app/udagram-api
       - run:
-          name: Build and Archive Server
+          name: Server Build and Archive
           command: |-
             npm run build
       - aws-cli/install
       - run:
-          name: Deploy Server
+          name: Server Deploy
           command: |-
             aws s3 cp ./www/Archive.zip udagram-app-env
-            aws elasticbeanstalk create-application-version --application-name $EB_APP --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="$EB_BUCKET",S3Key="Archive.zip"
-            aws elasticbeanstalk update-environment --application-name $EB_APP --environment-name $EB_ENV --version-label <<pipeline.git.revision>>
+            aws elasticbeanstalk create-application-version --application-name $udagram-app --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="$udagram-mohamed",S3Key="Archive.zip"
+            aws elasticbeanstalk update-environment --application-name $udagram-app --environment-name $udagram-app-env --version-label <<pipeline.git.revision>>
 workflows:
   build_and_deploy:
     jobs:
-      - frontend
       - server
+      - frontend
