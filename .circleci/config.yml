@@ -1,16 +1,16 @@
 version: 2.1
 orbs:
-  node: circleci/node@4.7
-  aws-cli: circleci/aws-cli@2.0.0
+  node: circleci/node@5.0.2
+  aws-cli: circleci/aws-cli@3.1.0
 jobs:
   frontend:
-    working_directory: ~/udagram-frontend
+    working_directory: ~/app/udagram-frontend
     executor: node/default
     steps:
       - checkout:
           path: ~/app
       - node/install-packages:
-          working_directory: ~/udagram-frontend
+          working_directory: ~/app/udagram-frontend
       - run:
           name: Frontend Build
           command: npm run build
@@ -18,19 +18,14 @@ jobs:
       - run:
           name: Frontend Deployment
           command: aws s3 cp --recursive --acl public-read ./www s3://udagram-mohamed/
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
   server:
-    working_directory: ~/udagram-api
+    working_directory: ~/app/udagram-api
     executor: node/default
     steps:
       - checkout:
           path: ~/app
       - node/install-packages:
-          working_directory: ~/udagram-api
+          working_directory: ~/app/udagram-api
       - run:
           name: Server Build and Archive
           command: npm run build
@@ -41,13 +36,18 @@ jobs:
             aws s3 cp ./www/Archive.zip udagram-app-env
             aws elasticbeanstalk create-application-version --application-name udagram-app --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="udagram-mohamed",S3Key="Archive.zip"
             aws elasticbeanstalk update-environment --application-name udagram-app --environment-name udagram-app-env --version-label <<pipeline.git.revision>>
-          requires:
-              - build
-            filters:
-              branches:
-                only: master
 workflows:
   build_and_deploy:
     jobs:
-      - server
-      - frontend
+      - server:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - frontend:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
