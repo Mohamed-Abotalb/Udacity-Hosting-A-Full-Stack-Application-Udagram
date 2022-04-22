@@ -10,7 +10,7 @@ jobs:
       - checkout:
           path: ~/app
       - node/install-packages:
-          working_directory: ~/app/udagram-frontend
+          app-dir: ~/app/udagram-frontend
       - run:
           name: Frontend Build
           command: npm run build
@@ -25,7 +25,7 @@ jobs:
       - checkout:
           path: ~/app
       - node/install-packages:
-          working_directory: ~/app/udagram-api
+          app-dir: ~/app/udagram-api
       - run:
           name: Server Build and Archive
           command: npm run build
