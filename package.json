@@ -6,9 +6,11 @@
       "api:build": "cd udagram-api && npm run build && cd ..",
       "api:install": "cd udagram-api && npm ci && cd ..",
       "api:test": "cd udagram-api && npm run test && cd ..",
+      "api:deploy": "cd udagram-api && npm run deploy && cd ..",
       "fe:build": "cd udagram-frontend && npm run build && cd ..",
       "fe:install": "cd udagram-frontend && npm ci && cd ..",
       "fe:test": "cd udagram-frontend && npm run test && cd ..",
+      "fe:deploy": "cd udagram-frontend && npm run deploy && cd ..",
       "postinstall": "npm run api:install && npm run fe:install"
     },
     "repository": {

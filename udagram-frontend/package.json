@@ -8,6 +8,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "deploy": "chmod +x ./bin/deploy.sh && ./bin/deploy.sh",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

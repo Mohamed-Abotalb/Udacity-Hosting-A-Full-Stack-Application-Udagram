@@ -3,7 +3,7 @@ orbs:
   node: circleci/node@5.0.2
   aws-cli: circleci/aws-cli@3.1.0
 jobs:
-  frontend:
+  frontend-build:
     working_directory: ~/app/udagram-frontend
     executor: node/default
     steps:
@@ -13,17 +13,20 @@ jobs:
           app-dir: ~/app/udagram-frontend
       - run:
           name: Frontend Build
-          command: npm run build
+          command: npm run fe:build
+  frontend-deploy:
+    working_directory: ~/app/udagram-frontend
+    executor: node/default
+    steps:
+      - checkout:
+          path: ~/app
+      - node/install-packages:
+          app-dir: ~/app/udagram-frontend
       - aws-cli/install
       - run:
           name: Frontend Deployment
-          command: aws s3 cp --recursive --acl public-read ./www s3://udagram-mohamed/
-          requires:
-            - Frontend Build
-          filters:
-            branches:
-              only: master
-  server:
+          command: npm run fe:deploy
+  server-build:
     working_directory: ~/app/udagram-api
     executor: node/default
     steps:
@@ -33,19 +36,34 @@ jobs:
           app-dir: ~/app/udagram-api
       - run:
           name: Server Build and Archive
-          command: npm run build
+          command: npm run api:build
+  server-deploy:
+    working_directory: ~/app/udagram-api
+    executor: node/default
+    steps:
+      - checkout:
+          path: ~/app
+      - node/install-packages:
+          app-dir: ~/app/udagram-api
       - aws-cli/install
       - run:
           name: Server Deployment
-          command: npm run deploy
-          requires:
-            - Server Build and Archive
-          filters:
-            branches:
-              only: master
+          command: npm run api:deploy
 workflows:
   build_and_deploy:
     jobs:
-      - server      
-      - frontend
+      - server-build
+      - server-deploy
+          requires:
+              - server-build
+            filters:
+              branches:
+                only: master
+      - frontend-build
+      - frontend-deploy
+          requires:
+              - frontend-build
+            filters:
+              branches:
+                only: master
           
