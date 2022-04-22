@@ -53,13 +53,19 @@ workflows:
   build_and_deploy:
     jobs:
       - server-build
+          filters:
+            branches:
+              only: master
       - server-deploy
-          requires:
-              - server-build
+          requires: 
+            - server-build
             filters:
               branches:
                 only: master
       - frontend-build
+        filters:
+          branches:
+            only: master
       - frontend-deploy
           requires:
               - frontend-build
