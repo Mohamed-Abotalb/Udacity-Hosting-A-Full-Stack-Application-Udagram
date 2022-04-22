@@ -65,15 +65,15 @@ workflows:
               only:
                 - master
       - frontend-build:
-        filters:
-          branches:
-            only: 
-             - master
+          filters:
+            branches:
+              only: 
+              - master
       - frontend-deploy:
           requires:
               - frontend-build
-            filters:
-              branches:
-                only: 
-                 - master
+          filters:
+            branches:
+              only: 
+                - master
           
