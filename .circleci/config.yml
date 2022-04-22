@@ -32,10 +32,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Server Deployment
-          command: |-
-            aws s3 cp ./www/Archive.zip udagram-app-env
-            aws elasticbeanstalk create-application-version --application-name udagram-app --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="udagram-mohamed",S3Key="Archive.zip"
-            aws elasticbeanstalk update-environment --application-name udagram-app --environment-name udagram-app-env --version-label <<pipeline.git.revision>>
+          command: npm run deploy
 workflows:
   build_and_deploy:
     jobs:
