@@ -41,13 +41,13 @@ workflows:
     jobs:
       - server:
           requires:
-            - build
+            - Server Build and Archive
           filters:
             branches:
               only: master
       - frontend:
           requires:
-            - build
+            - Frontend Build
           filters:
             branches:
               only: master
