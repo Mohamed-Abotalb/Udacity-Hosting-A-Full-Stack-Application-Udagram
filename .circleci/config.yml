@@ -2,7 +2,6 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   aws-cli: circleci/aws-cli@3.1.0
-  aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.1
 jobs:
   frontend-build:
     working_directory: ~/app/udagram-frontend
@@ -46,7 +45,6 @@ jobs:
           path: ~/app
       - node/install-packages:
           app-dir: ~/app/udagram-api
-      - aws-elastic-beanstalk/install
       - run:
           name: Install Elastic Beanstalk
           command: |
