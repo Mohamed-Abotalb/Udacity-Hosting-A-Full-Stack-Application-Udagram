@@ -25,7 +25,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Frontend Deployment
-          command: npm run deploy
+          command: aws s3 cp --recursive --acl public-read ./www $AWS_BUCKET
   server-build:
     working_directory: ~/app/udagram-api
     executor: node/default
