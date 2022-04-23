@@ -22,8 +22,7 @@ jobs:
           path: ~/app
       - node/install-packages:
           app-dir: ~/app/udagram-frontend
-      - aws-cli/install:
-          profile-name: default
+      - aws-cli/install
       - run:
           name: Frontend Deployment
           command: npm run deploy
