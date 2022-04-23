@@ -22,7 +22,8 @@ jobs:
           path: ~/app
       - node/install-packages:
           app-dir: ~/app/udagram-frontend
-      - aws-cli/install
+      - aws-cli/install:
+          profile-name: default
       - run:
           name: Frontend Deployment
           command: npm run deploy
@@ -45,6 +46,8 @@ jobs:
           path: ~/app
       - node/install-packages:
           app-dir: ~/app/udagram-api
+      - aws-cli/install:
+          profile-name: default
       - run:
           name: Install Elastic Beanstalk
           command: |
