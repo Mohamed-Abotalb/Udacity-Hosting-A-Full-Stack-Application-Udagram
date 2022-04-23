@@ -46,7 +46,7 @@ jobs:
           path: ~/app
       - node/install-packages:
           app-dir: ~/app/udagram-api
-      - eb/setup
+      - aws-elastic-beanstalk/install
       - run:
           name: Server Deployment
           command: npm run deploy
