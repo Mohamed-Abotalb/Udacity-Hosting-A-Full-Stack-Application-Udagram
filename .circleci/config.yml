@@ -46,17 +46,13 @@ jobs:
           path: ~/app
       - node/install-packages:
           app-dir: ~/app/udagram-api
-      - aws-cli/install:
-          profile-name: default
-      - run:
-          name: Install Elastic Beanstalk
-          command: |
-            - sudo apt-get -y -qq update
-            - sudo apt-get install python3-pip python3-dev build-essential
-            - sudo pip3 install awsebcli
+      - aws-cli/install
       - run:
           name: Server Deployment
-          command: eb deploy udagram-api-env
+          command: |-
+            aws s3 cp ./www/Archive.zip $S3_BUCKET_SERVER
+            aws elasticbeanstalk create-application-version --application-name udagram-app --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="$AWS_BUCKET",S3Key="Archive.zip"
+            aws elasticbeanstalk update-environment --application-name udagram-app --environment-name udagram-app-env --version-label <<pipeline.git.revision>>
 workflows:
   build_and_deploy:
     jobs:
