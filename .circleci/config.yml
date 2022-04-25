@@ -25,7 +25,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Frontend Deployment
-          command: npm run deploy
+          command: npm run fe:deploy
   server-build:
     working_directory: ~/app/udagram-api
     executor: node/default
