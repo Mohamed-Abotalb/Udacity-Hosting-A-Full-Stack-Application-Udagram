@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   aws-cli: circleci/aws-cli@3.1.0
+  eb: circleci/aws-elastic-beanstalk@2.0.1
 jobs:
   frontend-build:
     working_directory: ~/app/udagram-frontend
@@ -46,6 +47,7 @@ jobs:
       - node/install-packages:
           app-dir: ~/app/udagram-api
       - aws-cli/install
+      - eb/setup
       - run:
           name: Server Deployment
           command: npm run deploy
