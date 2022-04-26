@@ -26,7 +26,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Frontend Deployment
-          command: npm run fe:deploy
+          command: aws s3 sync ./udagram-frontend/www s3://udagram-mohamed
   server-build:
     working_directory: ~/app/udagram-api
     executor: node/default
@@ -50,7 +50,7 @@ jobs:
       - eb/setup
       - run:
           name: Server Deployment
-          command: npm run deploy
+          command: eb deploy
 workflows:
   build_and_deploy:
     jobs:
