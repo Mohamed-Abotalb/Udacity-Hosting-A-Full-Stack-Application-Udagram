@@ -25,7 +25,7 @@ jobs:
       - aws-cli/install
       - run:
           name: Frontend Deployment
-          command: aws s3 cp D:\COURSES\Programming\WEB\Advanced Web Development\3. Deployment Process\project\udagram-frontend\www s3://udagram-mohamed
+          command: aws s3 cp C:\Users\moham\Desktop\project\udagram-frontend\www s3://udagram-mohamed
   server-build:
     working_directory: ~/app/udagram-api
     executor: node/default
