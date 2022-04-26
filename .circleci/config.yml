@@ -4,7 +4,7 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.0
   eb: circleci/aws-elastic-beanstalk@2.0.1
 jobs:
-  frontend-build:
+  frontend:
     working_directory: ~/app/udagram-frontend
     executor: node/default
     steps:
@@ -15,19 +15,11 @@ jobs:
       - run:
           name: Frontend Build
           command: npm run build
-  frontend-deploy:
-    working_directory: ~/app/udagram-frontend
-    executor: node/default
-    steps:
-      - checkout:
-          path: ~/app
-      - node/install-packages:
-          app-dir: ~/app/udagram-frontend
       - aws-cli/install
       - run:
           name: Frontend Deployment
           command: npm run deploy
-  server-build:
+  server:
     working_directory: ~/app/udagram-api
     executor: node/default
     steps:
@@ -38,14 +30,6 @@ jobs:
       - run:
           name: Server Build and Archive
           command: npm run build
-  server-deploy:
-    working_directory: ~/app/udagram-api
-    executor: node/default
-    steps:
-      - checkout:
-          path: ~/app
-      - node/install-packages:
-          app-dir: ~/app/udagram-api
       - aws-cli/install
       - eb/setup
       - run:
@@ -54,28 +38,14 @@ jobs:
 workflows:
   build_and_deploy:
     jobs:
-      - server-build:
+      - server:
           filters:
             branches:
               only: 
                 - master
-      - server-deploy:
-          requires:
-            - server-build
-          filters:
-            branches:
-              only:
-                - master
-      - frontend-build:
+      - frontend:
           filters:
             branches:
               only: 
               - master
-      - frontend-deploy:
-          requires:
-              - frontend-build
-          filters:
-            branches:
-              only: 
-                - master
           
