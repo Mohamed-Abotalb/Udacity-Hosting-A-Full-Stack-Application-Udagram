@@ -1,1 +1,1 @@
-eb deploy udagram-app-env
+eb init --platform node.js --region us-east-1 && eb use udagram-app-dev
